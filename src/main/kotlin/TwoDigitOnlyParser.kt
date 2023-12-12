@@ -1,4 +1,4 @@
-object TwoDigitParser {
+object TwoDigitOnlyParser {
     fun parseNum(input: String): Int {
         val onlyNum = input.filter { it.isDigit() }
         val valFirst = onlyNum.firstOrNull()
