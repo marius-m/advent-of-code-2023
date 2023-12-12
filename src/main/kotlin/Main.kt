@@ -1,7 +1,19 @@
+import java.io.File
+
 fun main(args: Array<String>) {
     println("Hello World!")
 
-    // Try adding program arguments via Run/Debug configuration.
-    // Learn more about running applications: https://www.jetbrains.com/help/idea/running-applications.html.
-    println("Program arguments: ${args.joinToString()}")
+    val inputFile = File("input.txt")
+    if (!inputFile.exists())
+        throw IllegalArgumentException("Must provide an input file!")
+
+    // Reading lines from kotlin
+    val inputNums = inputFile
+        .bufferedReader(Charsets.UTF_8)
+        .readLines()
+        .map { inputLine -> TwoDigitParser.parseNum(inputLine) }
+    val sumOfNums = inputNums.sum()
+
+    println("Input nums: ${inputNums}")
+    println("Sum: ${sumOfNums}")
 }
