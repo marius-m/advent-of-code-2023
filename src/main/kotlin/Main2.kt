@@ -6,15 +6,16 @@ fun main(args: Array<String>) {
         throw IllegalArgumentException("Must provide an input file!")
 
     // Reading lines from kotlin
-    val inputNums = inputFile
+    val inputLines = inputFile
         .bufferedReader(Charsets.UTF_8)
         .readLines()
-        .map { inputLine ->
-            val num = TwoDigitWordsParser.parseNum(inputLine)
-            println("'$inputLine' -> $num")
-            num
+    val sw = System.currentTimeMillis()
+    val digits = inputLines.map { inputLine ->
+            val digitString = TwoDigitWordsParser.extractDigitsOverlapping(inputLine)
+            println("'$inputLine' -> ${digitString.digits}")
+            digitString.twoDigits
         }
-    val sumOfNums = inputNums.sum()
-
+    val sumOfNums = digits.sum()
+    println("sw: ${System.currentTimeMillis() - sw}ms")
     println("Sum: ${sumOfNums}")
 }

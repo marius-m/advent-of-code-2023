@@ -16,6 +16,43 @@ object TwoDigitWordsParser {
         .joinToString("|")
     private val regexNumAsWord = "($regexNumWords|[0-9])".toRegex()
 
+    /**
+     * Works, but the task does not detect overlapping functionality
+     * For overlapping, use [extractDigitsOverlapping]
+     */
+    fun extractDigits(input: String): DigitString {
+        val regexMatch = regexNumAsWord.findAll(input)
+        val matchValuesAsNum = regexMatch.toList()
+            .map { wordToNumOrZero(it.value) }
+            .joinToString(separator = "")
+        return DigitString(
+            original = input,
+            digits = matchValuesAsNum,
+        )
+    }
+
+    fun extractDigitsOverlapping(input: String): DigitString {
+        var index = 0
+        var digits = ""
+        while (index < input.length) {
+            val regexMatch = regexNumAsWord.find(input, index)
+            if (regexMatch != null) {
+                digits += wordToNumOrZero(regexMatch.value)
+                index = regexMatch.range.first + 1
+                continue
+            }
+            index++
+        }
+        return DigitString(
+            original = input,
+            digits = digits,
+        )
+    }
+
+    /**
+     * Failing, need more info, moved to [extractDigits]
+     */
+    @Deprecated("First try, does not work")
     fun parseNum(input: String): Int {
         val regexMatch = regexNumAsWord.findAll(input) ?: return 0
         val matchValuesAsNum = regexMatch.toList()
@@ -36,5 +73,21 @@ object TwoDigitWordsParser {
         return wordToNum
             .entries
             .firstOrNull { entry -> entry.key == input }?.value ?: 0
+    }
+
+    data class DigitString(
+        val original: String,
+        val digits: String,
+    ) {
+        val firstOrNull: Int? = digits.firstOrNull()
+            ?.digitToIntOrNull()
+        val firstOrZero: Int = firstOrNull ?: 0
+        val lastOrNull: Int? = digits.lastOrNull()
+            ?.digitToIntOrNull()
+        val lastOrZero: Int = lastOrNull ?: 0
+
+        val twoDigits: Int = "$firstOrZero$lastOrZero".toInt()
+
+        fun isEmpty(): Boolean = firstOrNull == null || lastOrNull == null
     }
 }
