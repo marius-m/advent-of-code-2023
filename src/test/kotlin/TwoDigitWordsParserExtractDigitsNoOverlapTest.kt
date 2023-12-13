@@ -230,7 +230,7 @@ class TwoDigitWordsParserExtractDigitsNoOverlapTest {
         assertEquals(
             TwoDigitWordsParser.DigitString(
                 original = "zoneightfive8nine2one6",
-                digits = "18589216",
+                digits = "1589216",
             ),
             result,
         )
